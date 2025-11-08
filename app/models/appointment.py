@@ -1,8 +1,6 @@
 from datetime import datetime as dt
 from enum import Enum
-from sqlalchemy import (
-    String, DateTime, Integer, ForeignKey, Enum as PgEnum
-)
+from sqlalchemy import String, DateTime, Integer, ForeignKey, Enum as PgEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..extensions import db
 
@@ -33,29 +31,33 @@ class Appointment(db.Model):
     )
 
     # Core de agenda
-    title: Mapped[str] = mapped_column(String(200), nullable=False)  # Nombre visible del evento
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
     start_at: Mapped[dt] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
     end_at: Mapped[dt]   = mapped_column(DateTime(timezone=True), nullable=False, index=True)
-    duration_min: Mapped[int] = mapped_column(Integer, nullable=False)  # redundante para rapidez de UI
+    duration_min: Mapped[int] = mapped_column(Integer, nullable=False)
 
     status: Mapped[AppointmentStatus] = mapped_column(
-        PgEnum(AppointmentStatus, name="appointment_status"), nullable=False, default=AppointmentStatus.PENDING, index=True
+        PgEnum(AppointmentStatus, name="appointment_status"),
+        nullable=False, default=AppointmentStatus.PENDING, index=True
     )
     appt_type: Mapped[AppointmentType] = mapped_column(
-        PgEnum(AppointmentType, name="appointment_type"), nullable=False, default=AppointmentType.CONSULTA, index=True
+        PgEnum(AppointmentType, name="appointment_type"),
+        nullable=False, default=AppointmentType.CONSULTA, index=True
     )
 
     # Extras
-    treatment: Mapped[str | None] = mapped_column(String(300), nullable=True)  # opcional
+    treatment: Mapped[str | None] = mapped_column(String(300), nullable=True)
     notes: Mapped[str | None] = mapped_column(String(4000), nullable=True)
 
-    created_at: Mapped[dt] = mapped_column(
-        DateTime(timezone=True), server_default=db.func.now(), nullable=False
-    )
-    updated_at: Mapped[dt] = mapped_column(
-        DateTime(timezone=True), server_default=db.func.now(),
-        onupdate=db.func.now(), nullable=False
-    )
+    created_at: Mapped[dt] = mapped_column(DateTime(timezone=True), server_default=db.func.now(), nullable=False)
+    updated_at: Mapped[dt] = mapped_column(DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now(), nullable=False)
 
-    patient = relationship("Patient")
+    patient = relationship(
+        "Patient",
+        backref=db.backref(
+            "appointments",
+            cascade="all, delete-orphan",
+            passive_deletes=True,   # <= consistente
+        ),
+    )
     professional = relationship("User")

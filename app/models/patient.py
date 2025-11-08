@@ -29,18 +29,18 @@ class Patient(db.Model):
     address: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     # Datos clínicos
-    weight_kg: Mapped[float | None] = mapped_column(Float, nullable=True)   # OBLIG en sección 2
-    height_m: Mapped[float | None] = mapped_column(Float, nullable=True)    # OBLIG en sección 2
-    bmi: Mapped[float | None] = mapped_column(Float, nullable=True)         # calculado y guardado
-    age_years: Mapped[int | None] = mapped_column(Integer, nullable=True)   # calculado y guardado
+    weight_kg: Mapped[float | None] = mapped_column(Float, nullable=True)
+    height_m: Mapped[float | None] = mapped_column(Float, nullable=True)
+    bmi: Mapped[float | None] = mapped_column(Float, nullable=True)
+    age_years: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
-    past_history: Mapped[str | None] = mapped_column(String(2000), nullable=True)     # antecedentes patológicos
+    past_history: Mapped[str | None] = mapped_column(String(2000), nullable=True)
     allergies: Mapped[str | None] = mapped_column(String(2000), nullable=True)
-    treatments_of_interest: Mapped[str | None] = mapped_column(String(2000), nullable=True)  # OBLIG en sección 2
+    treatments_of_interest: Mapped[str | None] = mapped_column(String(2000), nullable=True)
 
-    # Documentos/consentimientos (sección 3)
-    privacy_notice_accepted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)   # OBLIG en sección 3
-    informed_consent_accepted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False) # OBLIG en sección 3
+    # Documentos/consentimientos
+    privacy_notice_accepted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    informed_consent_accepted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Contacto de emergencia
     emergency_full_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
@@ -48,8 +48,9 @@ class Patient(db.Model):
     emergency_relation: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=db.func.now(), nullable=False)
-    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=db.func.now(),
-                                                 onupdate=db.func.now(), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now(), nullable=False
+    )
 
     # Helpers -----------------------------------------------------------------
     @property

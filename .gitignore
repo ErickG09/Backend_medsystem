@@ -1,0 +1,45 @@
+# ---------------------------------
+# Entornos Virtuales
+# ---------------------------------
+# Ignora el directorio venv/ de tu lista
+venv/
+# También ignora otros nombres comunes
+.venv/
+env/
+.env/
+
+# ---------------------------------
+# Archivos de Entorno
+# ---------------------------------
+# Ignora el archivo .env de tu lista
+.env
+# Ignora otros archivos .env locales o específicos
+.env.*
+# ¡PERO no ignores los archivos de ejemplo!
+!*.env.example
+
+# ---------------------------------
+# Caché de Python
+# ---------------------------------
+# Ignora __pycache__/ de tu lista
+__pycache__/
+# También ignora archivos compilados de Python
+*.pyc
+*.pyo
+*.pyd
+
+# ---------------------------------
+# Caché de Herramientas (Linters, Pruebas)
+# ---------------------------------
+# Ignora .flake8/ de tu lista
+.flake8/
+# También ignora cachés de otras herramientas comunes
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------------------------------
+# Archivos Específicos de tu Proyecto
+# ---------------------------------
+# Ignora requirements-dev.txt de tu lista
+requirements-dev.txt

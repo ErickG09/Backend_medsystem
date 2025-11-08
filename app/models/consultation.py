@@ -14,31 +14,31 @@ class Consultation(db.Model):
         ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True
     )
 
-    # Título / nombre de la consulta (ej. "Control post-operatorio")
+    # Título / nombre de la consulta
     title: Mapped[str] = mapped_column(String(200), nullable=False)
 
-    # Fecha y hora de la consulta (CDMX -> guardamos como timestamptz en UTC)
-    datetime: Mapped[dt] = mapped_column(
-        DateTime(timezone=True), nullable=False, index=True
-    )
+    # Fecha y hora (UTC)
+    datetime: Mapped[dt] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
 
-    # Texto libre para “notas”
+    # Notas
     notes: Mapped[str | None] = mapped_column(String(4000), nullable=True)
 
-    # Productos principales usados (texto simple por ahora)
+    # Productos usados (texto simple)
     products: Mapped[str | None] = mapped_column(String(2000), nullable=True)
 
     created_at: Mapped[dt] = mapped_column(
         DateTime(timezone=True), server_default=db.func.now(), nullable=False
     )
     updated_at: Mapped[dt] = mapped_column(
-        DateTime(timezone=True),
-        server_default=db.func.now(),
-        onupdate=db.func.now(),
-        nullable=False,
+        DateTime(timezone=True), server_default=db.func.now(), onupdate=db.func.now(), nullable=False
     )
 
     patient = relationship(
-        "Patient", backref=db.backref("consultations", cascade="all, delete-orphan")
+        "Patient",
+        backref=db.backref(
+            "consultations",
+            cascade="all, delete-orphan",
+            passive_deletes=True,   # <= importante con ON DELETE CASCADE
+        ),
     )
     professional = relationship("User")
